@@ -63,7 +63,8 @@ public class TeaserImplTest {
     protected  static final String TEST_ROOT_PAGE = "/content/teasers";
     protected  static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     protected  static final String TITLE = "Teaser";
-    protected  static final String DESCRIPTION = "Description";
+    protected  static final String PRETITLE = "Teaser's Pretitle";
+    protected static final String DESCRIPTION = "Description";
     protected  static final String LINK = "https://www.adobe.com";
     protected  static final String TEASER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-1";
     protected  static final String TEASER_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-2";
@@ -77,7 +78,7 @@ public class TeaserImplTest {
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
     protected TestLogger testLogger;
-    
+
     protected String testBase;
 
     @BeforeEach
@@ -108,6 +109,7 @@ public class TeaserImplTest {
             testImageResourceValueMap(Objects.requireNonNull(teaser.getImageResource().adaptTo(ValueMap.class)));
             assertEquals(TEASER_1, teaser.getImageResource().getPath());
         }
+        assertEquals(PRETITLE, teaser.getPretitle());
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertEquals(LINK, teaser.getLinkURL());
@@ -141,7 +143,7 @@ public class TeaserImplTest {
     protected void testInvalidFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_2);
         assertThat(testLogger.getLoggingEvents(), hasItem(error(
-                "Asset /content/dam/core/images/Adobe_Systems_logo_and_wordmark configured for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-2 doesn't exist.")));
+            "Asset /content/dam/core/images/Adobe_Systems_logo_and_wordmark configured for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-2 doesn't exist.")));
         assertNull(teaser.getImageResource());
     }
 
@@ -149,7 +151,7 @@ public class TeaserImplTest {
     protected void testEmptyFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_3);
         assertThat(testLogger.getLoggingEvents(), hasItem(debug(
-                "Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.")));
+            "Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.")));
         assertNull(teaser.getImageResource());
     }
 
@@ -158,7 +160,7 @@ public class TeaserImplTest {
     protected void testTeaserWithoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
         assertThat(testLogger.getLoggingEvents(),
-                hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
+            hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
         assertNull(teaser.getLinkURL());
     }
 

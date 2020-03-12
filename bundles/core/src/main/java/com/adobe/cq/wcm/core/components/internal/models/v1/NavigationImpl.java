@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.jcr.RangeIterator;
@@ -63,7 +64,7 @@ public class NavigationImpl implements Navigation {
 
     @Self
     private LinkHandler linkHandler;
-    
+
     @SlingObject
     private ResourceResolver resourceResolver;
 
@@ -89,6 +90,7 @@ public class NavigationImpl implements Navigation {
     private String navigationRootPage;
     private List<NavigationItem> items;
     private boolean skipNavigationRoot;
+    private int structureStart;
 
     @PostConstruct
     private void initModel() {
@@ -98,7 +100,17 @@ public class NavigationImpl implements Navigation {
             structureDepth = -1;
         }
         navigationRootPage = properties.get(PN_NAVIGATION_ROOT, currentStyle.get(PN_NAVIGATION_ROOT, String.class));
-        skipNavigationRoot = properties.get(PN_SKIP_NAVIGATION_ROOT, currentStyle.get(PN_SKIP_NAVIGATION_ROOT, true));
+        if (currentStyle.containsKey(PN_STRUCTURE_START) || properties.containsKey(PN_STRUCTURE_START)) {
+            //workaround to maintain the content of Navigation component of users in case they update to the current i.e. the `structureStart` version.
+            structureStart = properties.get(PN_STRUCTURE_START, currentStyle.get(PN_STRUCTURE_START, 1));
+        } else {
+            skipNavigationRoot = properties.get(PN_SKIP_NAVIGATION_ROOT, currentStyle.get(PN_SKIP_NAVIGATION_ROOT, true));
+            if (skipNavigationRoot) {
+                structureStart = 1;
+            } else {
+                structureStart = 0;
+            }
+        }
     }
 
     @Override
@@ -127,7 +139,8 @@ public class NavigationImpl implements Navigation {
                 } else if (liveCopiesIterator != null) {
                     while (liveCopiesIterator.hasNext()) {
                         LiveRelationship relationship = (LiveRelationship) liveCopiesIterator.next();
-                        if (currentPage.getPath().startsWith(relationship.getTargetPath() + "/")) {
+                        String currentPagePath = currentPage.getPath() + "/";
+                        if (currentPagePath.startsWith(relationship.getTargetPath() + "/")) {
                             Page liveCopyNavigationRoot = pageManager.getPage(relationship.getTargetPath());
                             if (liveCopyNavigationRoot != null) {
                                 navigationRoot = new NavigationRoot(liveCopyNavigationRoot, structureDepth);
@@ -136,20 +149,14 @@ public class NavigationImpl implements Navigation {
                         }
                     }
                 }
-                items = getItems(navigationRoot, navigationRoot.page);
-                if (!skipNavigationRoot) {
-                    boolean isSelected = checkSelected(navigationRoot.page);
-                    NavigationItem root = newNavigationItem(navigationRoot.page, isSelected, linkHandler, 0, items);
-                    items = new ArrayList<>();
-                    items.add(root);
-                }
+                items = getNavigationTree(navigationRoot);
             } else {
                 items = Collections.emptyList();
             }
         }
         return Collections.unmodifiableList(items);
     }
-    
+
     protected NavigationItem newNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children) {
         return new NavigationItemImpl(page, active, linkHandler, level, children);
     }
@@ -179,13 +186,50 @@ public class NavigationImpl implements Navigation {
             while (it.hasNext()) {
                 Page page = it.next();
                 int pageLevel = getLevel(page);
-                int level = pageLevel - navigationRoot.startLevel;
+                int level = pageLevel - navigationRoot.startLevel - 1;
                 List<NavigationItem> children = getItems(navigationRoot, page);
                 boolean isSelected = checkSelected(page);
-                if (skipNavigationRoot) {
-                    level = level - 1;
+                if (structureStart == 0) {
+                    level = level + 1;
                 }
                 pages.add(newNavigationItem(page, isSelected, linkHandler, level, children));
+            }
+        }
+        return pages;
+    }
+
+    private List<NavigationItem> getNavigationTree(NavigationRoot navigationRoot) {
+        List<NavigationItem> itemTree = new ArrayList<>();
+        Iterator<NavigationRoot> it = getRootItems(navigationRoot, structureStart).iterator();
+        while (it.hasNext()) {
+            NavigationRoot item = it.next();
+            itemTree.addAll(getItems(item, item.page));
+        }
+        if (structureStart == 0) {
+            boolean isSelected = checkSelected(navigationRoot.page);
+            NavigationItem root = newNavigationItem(navigationRoot.page, isSelected, linkHandler, 0, itemTree);
+            itemTree = new ArrayList<>();
+            itemTree.add(root);
+        }
+        return  itemTree;
+    }
+
+    private List<NavigationRoot> getRootItems(NavigationRoot navigationRoot, int structureStart) {
+        LinkedList<NavigationRoot> pages = new LinkedList<>();
+        pages.addLast(navigationRoot);
+        if (structureStart != 0) {
+            int level = 1;
+            while (level != structureStart && !pages.isEmpty()) {
+                int size = pages.size();
+                while (size > 0) {
+                    NavigationRoot item = pages.removeFirst();
+                    Iterator<Page> it = item.page.listChildren(new PageFilter());
+                    while (it.hasNext()) {
+                        pages.addLast(new NavigationRoot(it.next(), structureDepth));
+                    }
+                    size = size - 1;
+                }
+                level = level + 1;
             }
         }
         return pages;

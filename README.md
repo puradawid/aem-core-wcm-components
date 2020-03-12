@@ -23,7 +23,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 
 ## Available Components
 
-### Template components
+### Templating
 
 1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
 2. [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
@@ -31,28 +31,28 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 
-### Page authoring components
+### Page Authoring
 
-6. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
-7. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+7. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
 8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
-9. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
-10. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
-11. [Experience Fragment](content/src/content/jcr_root/apps/core/wcm/components/experiencefragment/v1/experiencefragment)
-12. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
-13. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
-14. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
-15. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
-16. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
-17. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
-18. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
+10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
+11. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
+12. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
+13. [Experience Fragment](content/src/content/jcr_root/apps/core/wcm/components/experiencefragment/v1/experiencefragment)
+14. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
+15. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
+16. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
+17. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+18. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
 
-### Container components
+### Container
 
 19. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
 20. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
-21. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
-22. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
+21. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
+22. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
 
 ### Form components
 
@@ -64,6 +64,27 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 
 Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for the main upcoming components and features.
 
+## Extensions
+
+### AMP
+
+Learn more about AMP [here](https://amp.dev/).
+
+The [Component Library](https://www.adobe.com/go/aem_cmp_library) and [its code](examples/src/content/jcr_root/apps/core-components-examples) in this repository show how it can be used. 
+
+#### AMP behavior control
+
+For AEM users to control if they want their pages to be / not be AMP, an author with sufficient permissions can go un the page template's Page Policy and select the **AMP Mode**. It has the following options:
+
+1. ***No AMP***: This is the default. Pages will still render as usual and if a page is requested with the `amp` selector, its HTML version will be rendered and the proper metadata in the `<head>` will inform there is no AMP version for this page.
+2. ***Paired AMP***: This mode will allow delivery of **both** HTML and AMP pages relying on the `amp` sling selector to render a `page.html` and `page.amp.html` (see [Technical aspects of AMP for AEM Core Components](extensions/amp/README.md) for more details)
+3. ***AMP Only***: The opposite of "No AMP". Pages requested will attempt to render their AMP version regardless of the request containing the `.amp` selector or not.
+
+All pages using the template where this is specified will inherit the behavior. This can also be overwritten at the page level by going to the page properties, under the "Advanced" tab and changing the "AMP Mode" from "Inherit from Page template" to something else. This will let Authors control if they want certain pages to have a different behavior than the one specified by the template.
+
+**Read more about the [Technical aspects of AMP for AEM Core Components](extensions/amp/README.md)**
+
+
 ## Component Versioning
 
 The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
@@ -74,7 +95,7 @@ The latest version of the Core Components, require the below system requirements
 
 Core Components | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
 ----------------|---------|---------|---------|------
-[2.7.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.7.0) | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11
+[2.8.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.8.0) | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
@@ -134,7 +155,7 @@ To include the core components package into your own project's maven build using
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.7.0</version>
+     <version>2.8.0</version>
  </dependency>
  ```
 
@@ -159,7 +180,7 @@ To include the core components package into your own project using AEM Archetype
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.7.0</version>
+     <version>2.8.0</version>
  </dependency>
  ```
 

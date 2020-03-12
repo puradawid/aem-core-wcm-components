@@ -185,7 +185,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             }
         }
     }
-    
+
     protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt ) {
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }

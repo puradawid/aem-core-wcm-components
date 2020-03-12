@@ -47,7 +47,8 @@ The following properties are written to JCR for this Carousel component and are 
 1. `./autoplay` - defines whether or not the carousel should automatically transition between slides.
 2. `./delay` - defines the delay (in milliseconds) when automatically transitioning between slides.
 3. `./autopauseDisabled` - defines whether or not automatic pause when hovering the carousel is disabled.
-4. `./accessibilityLabel` - defines an accessibility label for the carousel.
+4. `./id` - defines the component HTML ID attribute.
+5. `./accessibilityLabel` - defines an accessibility label for the carousel.
 
 The edit dialog also allows editing of Carousel items (adding, removing, naming, re-ordering).
 
@@ -99,7 +100,7 @@ data-cmp-hook-carousel="indicator"
 ### Enabling Carousel Editing Functionality
 The following properties and child nodes are required in the proxy component to enable full editing functionality for the Carousel:
 
-1. `./cq:isContainer` - set to `true`, marks the Carousel as a container component
+1. `./cq:isContainer` - set to `{Boolean}true`, marks the Carousel as a container component
 2. `./cq:editConfig` - `afterchilddelete`, `afterchildinsert` and `afterchildmove` listeners should be provided via
 the edit configuration of the proxy. `_cq_editConfig.xml` contains the recommended actions and can be copied to the proxy component.
 
