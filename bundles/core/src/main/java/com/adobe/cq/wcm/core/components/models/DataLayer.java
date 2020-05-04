@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.wcm.core.components.internal.jackson.DataLayerSerializer;
@@ -162,6 +163,7 @@ public interface DataLayer {
      * @return JSON string
      */
     @JsonIgnore
+    @Nullable
     default String getString() {
         throw new UnsupportedOperationException();
     }
