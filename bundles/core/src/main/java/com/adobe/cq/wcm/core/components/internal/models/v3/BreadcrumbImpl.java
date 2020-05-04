@@ -37,8 +37,8 @@ public class BreadcrumbImpl extends com.adobe.cq.wcm.core.components.internal.mo
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/breadcrumb/v3/breadcrumb";
 
-    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children) {
-        return new BreadcrumbItemImpl(page, active, linkHandler, level, children);
+    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String parentId, boolean isShadowingDisabled) {
+        return new BreadcrumbItemImpl(page, active, linkHandler, level, children, parentId, isShadowingDisabled);
     }
 
 }

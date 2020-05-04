@@ -16,6 +16,9 @@
 (function() {
     "use strict";
 
+    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+
     var NS = "cmp";
     var IS = "accordion";
 
@@ -31,7 +34,7 @@
     };
 
     var selectors = {
-        self: "[data-" +  NS + '-is="' + IS + '"]'
+        self: "[data-" + NS + '-is="' + IS + '"]'
     };
 
     var cssClasses = {
@@ -109,15 +112,42 @@
                 that._elements["button"] = Array.isArray(that._elements["button"]) ? that._elements["button"] : [that._elements["button"]];
                 that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
 
-                if (that._properties.singleExpansion) {
-                    var expandedItems = getExpandedItems();
-                    // no expanded item annotated, force the first item to display.
-                    if (expandedItems.length === 0) {
-                        toggle(0);
+                // Expand the item based on deep-link-id if it matches with any existing accordion item id
+                var deepLinkIdIndex = -1;
+                if (config.deepLinkId && config.deepLinkId.substring("-item-item") !== -1) {
+                    for (var i = 0; i < that._elements["item"].length; i++) {
+                        var item = that._elements["item"][i];
+                        if (item.id === config.deepLinkId) {
+                            deepLinkIdIndex = i;
+                            if (!item.hasAttribute(dataAttributes.item.expanded)) {
+                                setItemExpanded(item, true);
+                            }
+                            break;
+                        }
                     }
-                    // multiple expanded items annotated, display the last item open.
-                    if (expandedItems.length > 1) {
-                        toggle(expandedItems.length - 1);
+                }
+
+                if (that._properties.singleExpansion) {
+                    // No deep linking as the index is -1
+                    if (deepLinkIdIndex === -1) {
+                        var expandedItems = getExpandedItems();
+                        // no expanded item annotated, force the first item to display.
+                        if (expandedItems.length === 0) {
+                            toggle(0);
+                        }
+                        // multiple expanded items annotated, display the last item open.
+                        if (expandedItems.length > 1) {
+                            toggle(expandedItems.length - 1);
+                        }
+                    } else {
+                        // Deep link case
+                        // Collapse the items other than which is deep linked
+                        for (var j = 0; j < that._elements["item"].length; j++) {
+                            if (j !== deepLinkIdIndex &&
+                                that._elements["item"][j].hasAttribute(dataAttributes.item.expanded)) {
+                                setItemExpanded(that._elements["item"][j], false);
+                            }
+                        }
                     }
                 }
 
@@ -300,6 +330,23 @@
                 } else {
                     setItemExpanded(item, !getItemExpanded(item));
                 }
+
+                if (dataLayerEnabled) {
+                    var accordionId = that._elements.self.id;
+                    var expandedItems = getExpandedItems()
+                        .map(function(item) {
+                            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+                        });
+
+                    var uploadPayload = {component: {}};
+                    uploadPayload.component[accordionId] = { shownItems: expandedItems };
+
+                    var removePayload = {component: {}};
+                    removePayload.component[accordionId] = { shownItems: undefined };
+
+                    dataLayer.push(removePayload);
+                    dataLayer.push(uploadPayload);
+                }
             }
         }
 
@@ -313,8 +360,25 @@
         function setItemExpanded(item, expanded) {
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
+                if (dataLayerEnabled) {
+                    dataLayer.push({
+                        event: "cmp:show",
+                        eventInfo: {
+                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                        }
+                    });
+                }
+
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
+                if (dataLayerEnabled) {
+                    dataLayer.push({
+                        event: "cmp:hide",
+                        eventInfo: {
+                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                        }
+                    });
+                }
             }
             refreshItem(item);
         }
@@ -468,14 +532,39 @@
     }
 
     /**
+     * Parses the url to extract the deep-link-id and returns deep-link-id
+     *
+     * @private
+     * @returns {String} deep-link-id if found otherwise undefined
+     */
+    function getDeepLinkId() {
+        if (window.location.hash) {
+            var uriParts = document.URL.split("#");
+            return uriParts[uriParts.length - 1];
+        }
+    }
+
+    /**
+     * Parses the dataLayer string and returns the ID
+     *
+     * @private
+     * @param {String} componentDataLayer the dataLayer string
+     * @returns {String} dataLayerId or undefined
+     */
+    function getDataLayerId(componentDataLayer) {
+        return Object.keys(JSON.parse(componentDataLayer))[0];
+    }
+
+    /**
      * Document ready handler and DOM mutation observers. Initializes Accordion components as necessary.
      *
      * @private
      */
     function onDocumentReady() {
+        var deepLinkId = getDeepLinkId();
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
-            new Accordion({ element: elements[i], options: readData(elements[i]) });
+            new Accordion({ element: elements[i], options: readData(elements[i]), deepLinkId: deepLinkId });
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -489,7 +578,7 @@
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
                             elementsArray.forEach(function(element) {
-                                new Accordion({ element: element, options: readData(element) });
+                                new Accordion({ element: element, options: readData(element), deepLinkId: deepLinkId });
                             });
                         }
                     });

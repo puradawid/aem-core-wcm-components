@@ -29,8 +29,8 @@ public class PanelContainerItemImpl extends ResourceListItemImpl implements List
     public static final String PN_PANEL_TITLE = "cq:panelTitle";
 
     public PanelContainerItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource,
-            @NotNull LinkHandler linkHandler) {
-        super(request, resource, linkHandler);
+            @NotNull LinkHandler linkHandler, String parentId) {
+        super(request, resource, linkHandler, parentId);
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
             String jcrTitle = valueMap.get(JcrConstants.JCR_TITLE, String.class);

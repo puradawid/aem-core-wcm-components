@@ -113,8 +113,7 @@ public class LanguageNavigationImplTest {
                 NAVIGATION_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-3");
         List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
         verifyLanguageNavigationItems(EXPECTED_PAGES_DEPTH_2, items);
-        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(testBase, "languagenavigation2"));
-
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(testBase, "languagenavigation3"));
     }
 
     @Test
@@ -122,8 +121,7 @@ public class LanguageNavigationImplTest {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(
                 NAVIGATION_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-4");
         assertEquals("Didn't expect any language navigation items.", 0, languageNavigation.getItems().size());
-        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(testBase, "languagenavigation3"));
-
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(testBase, "languagenavigation4"));
     }
 
     @Test
@@ -154,6 +152,7 @@ public class LanguageNavigationImplTest {
     }
 
     protected  LanguageNavigation getLanguageNavigationUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath(CONTEXT_PATH);

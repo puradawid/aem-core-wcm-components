@@ -24,8 +24,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl {
     
-    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page) {
-        super(linkHandler, page);
+    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled) {
+        super(linkHandler, page, parentId, isShadowingDisabled);
     }
 
     @Override

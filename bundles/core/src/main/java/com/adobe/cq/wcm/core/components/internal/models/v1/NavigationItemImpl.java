@@ -31,8 +31,8 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     protected int level;
     protected boolean active;
 
-    public NavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children) {
-        super(linkHandler, page);
+    public NavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String parentId, boolean isShadowingDisabled) {
+        super(linkHandler, page, parentId, isShadowingDisabled);
         this.active = active;
         this.level = level;
         this.children = children;
@@ -59,5 +59,4 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     public int getLevel() {
         return level;
     }
-
 }

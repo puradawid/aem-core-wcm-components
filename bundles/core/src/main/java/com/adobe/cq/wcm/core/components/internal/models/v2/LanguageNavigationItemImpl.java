@@ -32,8 +32,8 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
     protected String country;
     protected String language;
 
-    public LanguageNavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String title) {
-        super(page, active, linkHandler, level, children);
+    public LanguageNavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String title, String parentId, boolean isShadowingDisabled) {
+        super(page, active, linkHandler, level, children, parentId, isShadowingDisabled);
         this.title = title;
     }
 

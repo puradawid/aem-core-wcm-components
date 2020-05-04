@@ -45,7 +45,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
        adapters = {Title.class, ComponentExporter.class},
        resourceType = {TitleImpl.RESOURCE_TYPE_V1, TitleImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TitleImpl implements Title {
+public class TitleImpl extends AbstractComponentImpl implements Title {
 
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/title/v1/title";
     protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/title/v2/title";
@@ -79,7 +79,7 @@ public class TitleImpl implements Title {
     protected Link link;
 
     /**
-     * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the type of this title.
+     * The {@link com.adobe.cq.wcm.core.components.internal.Heading} object for the type of this title.
      */
     private Heading heading;
 
@@ -132,4 +132,17 @@ public class TitleImpl implements Title {
         return resource.getResourceType();
     }
 
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getLinkURL();
+    }
+
+    @Override
+    public String getDataLayerTitle() {
+        return getText();
+    }
 }

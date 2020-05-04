@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.day.cq.wcm.api.TemplatedResource;
+import javax.annotation.CheckForNull;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -41,12 +42,11 @@ import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.annotation.CheckForNull;
 
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
@@ -58,7 +58,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
 
     @Self
     protected LinkHandler linkHandler;
-    
+
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
     protected Style currentStyle;
@@ -143,7 +143,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     protected List<ListItem> readItems() {
         List<ListItem> items = new LinkedList<>();
         getChildren().forEach(res -> {
-            items.add(new ResourceListItemImpl(request, res, linkHandler));
+            items.add(new ResourceListItemImpl(request, res, linkHandler, getId()));
         });
         return items;
     }

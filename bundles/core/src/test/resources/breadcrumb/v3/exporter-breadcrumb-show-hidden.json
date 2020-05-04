@@ -1,20 +1,54 @@
 {
+    "id": "breadcrumb-b32eadfd98",
     "items": [
         {
+            "id": "breadcrumb-b32eadfd98-item-11c305ace0",
             "link": { "valid": true, "url": "/content/breadcrumb/women.html" },
             "title" : "Women",
-            "active": false
+            "active": false,
+            "dataLayer": {
+                "breadcrumb-b32eadfd98-item-11c305ace0": {
+                    "linkUrl": "/content/breadcrumb/women.html",
+                    "type": "cq:PageContent",
+                    "title": "Women"
+                }
+            },
+            ":type": "cq:PageContent"
         },
         {
+            "id": "breadcrumb-b32eadfd98-item-0b751aeddc",
             "link": { "valid": true, "url": "/content/breadcrumb/women/shirts.html" },
             "title" : "Shirts",
-            "active": false
+            "active": false,
+            "dataLayer": {
+                "breadcrumb-b32eadfd98-item-0b751aeddc": {
+                    "linkUrl": "/content/breadcrumb/women/shirts.html",
+                    "type": "coretest/components/structure/page",
+                    "title": "Shirts"
+                }
+            },
+            ":type": "coretest/components/structure/page"
         },
         {
+            "id": "breadcrumb-b32eadfd98-item-a66a50bca8",
             "link": { "valid": true, "url": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html"},
             "title" : "Devi Sleeveless Shirt",
-            "active": true
+            "active": true,
+            "dataLayer": {
+                "breadcrumb-b32eadfd98-item-a66a50bca8": {
+                    "linkUrl": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
+                    "type": "coretest/components/structure/page",
+                    "title": "Devi Sleeveless Shirt"
+                }
+            },
+            ":type": "coretest/components/structure/page"
         }
     ],
+    "dataLayer": {
+        "breadcrumb-b32eadfd98": {
+            "lastModifiedDate": "2016-01-11T15:21:45Z",
+            "type": "core/wcm/components/breadcrumb/v3/breadcrumb"
+        }
+    },
     ":type": "core/wcm/components/breadcrumb/v3/breadcrumb"
 }

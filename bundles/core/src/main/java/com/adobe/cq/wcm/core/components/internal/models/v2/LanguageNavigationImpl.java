@@ -39,8 +39,8 @@ public class LanguageNavigationImpl extends com.adobe.cq.wcm.core.components.int
 
     public static final String RESOURCE_TYPE = "core/wcm/components/languagenavigation/v2/languagenavigation";
 
-    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String title) {
-        return new LanguageNavigationItemImpl(page, active, linkHandler, level, children, title);
+    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String title, String parentId, boolean isShadowingDisabled) {
+        return new LanguageNavigationItemImpl(page, active, linkHandler, level, children, title, parentId, isShadowingDisabled);
     }
 
 }

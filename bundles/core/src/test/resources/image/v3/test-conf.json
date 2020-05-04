@@ -1,29 +1,29 @@
 {
     "jcr:primaryType": "sling:Folder",
-    "coretest"       : {
+    "coretest": {
         "jcr:primaryType": "sling:OrderedFolder",
-        "jcr:title"      : "Core",
-        "settings"       : {
+        "jcr:title": "Core",
+        "settings": {
             "jcr:primaryType": "sling:Folder",
-            "wcm"            : {
+            "wcm": {
                 "jcr:primaryType": "cq:Page",
-                "policies"       : {
+                "policies": {
                     "jcr:primaryType": "cq:Page",
-                    "coretest"       : {
-                        "jcr:primaryType"   : "nt:unstructured",
+                    "coretest": {
+                        "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "nt:unstructured",
-                        "components"        : {
-                            "jcr:primaryType"   : "nt:unstructured",
+                        "components": {
+                            "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "nt:unstructured",
-                            "content"           : {
-                                "jcr:primaryType"   : "nt:unstructured",
+                            "content": {
+                                "jcr:primaryType": "nt:unstructured",
                                 "sling:resourceType": "nt:unstructured",
-                                "image"             : {
-                                    "jcr:primaryType"     : "nt:unstructured",
+                                "image": {
+                                    "jcr:primaryType": "nt:unstructured",
                                     "policy_1478854677326": {
-                                        "jcr:primaryType"       : "nt:unstructured",
-                                        "jcr:title"             : "images",
-                                        "uuidDisabled"           : false,
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "jcr:title": "images",
+                                        "uuidDisabled": false,
                                         "allowedRenditionWidths": [
                                             600,
                                             700,
@@ -31,71 +31,71 @@
                                             2000,
                                             2500
                                         ],
-                                        "allowUpload"           : "true",
-                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
-                                        "jcr:content"           : {
+                                        "allowUpload": "true",
+                                        "sling:resourceType": "wcm/core/components/policy/policy",
+                                        "jcr:content": {
                                             "jcr:primaryType": "nt:unstructured"
                                         },
-                                        "plugins"               : {
+                                        "plugins": {
                                             "jcr:primaryType": "nt:unstructured"
                                         }
                                     },
                                     "policy_1478854677327": {
-                                        "jcr:primaryType"       : "nt:unstructured",
-                                        "jcr:title"             : "images",
-                                        "uuidDisabled"           : true,
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "jcr:title": "images",
+                                        "uuidDisabled": true,
                                         "allowedRenditionWidths": [
                                             "600",
                                             "700",
                                             "invalid"
                                         ],
-                                        "allowUpload"           : "true",
-                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
-                                        "jcr:content"           : {
+                                        "allowUpload": "true",
+                                        "sling:resourceType": "wcm/core/components/policy/policy",
+                                        "jcr:content": {
                                             "jcr:primaryType": "nt:unstructured"
                                         },
-                                        "plugins"               : {
+                                        "plugins": {
                                             "jcr:primaryType": "nt:unstructured"
                                         }
                                     },
                                     "policy_1478854677328": {
-                                        "jcr:primaryType"       : "nt:unstructured",
-                                        "jcr:title"             : "images",
-                                        "uuidDisabled"           : true,
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "jcr:title": "images",
+                                        "uuidDisabled": true,
                                         "allowedRenditionWidths": [
                                             600
                                         ],
-                                        "disableLazyLoading"    : "true",
-                                        "allowUpload"           : "true",
-                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
-                                        "jcr:content"           : {
+                                        "disableLazyLoading": "true",
+                                        "allowUpload": "true",
+                                        "sling:resourceType": "wcm/core/components/policy/policy",
+                                        "jcr:content": {
                                             "jcr:primaryType": "nt:unstructured"
                                         },
-                                        "plugins"               : {
+                                        "plugins": {
                                             "jcr:primaryType": "nt:unstructured"
                                         }
                                     },
                                     "policy_1478854677329": {
-                                        "jcr:primaryType"       : "nt:unstructured",
-                                        "jcr:title"             : "images",
-                                        "uuidDisabled"           : true,
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "jcr:title": "images",
+                                        "uuidDisabled": true,
                                         "allowedRenditionWidths": [
                                             -1
                                         ],
-                                        "disableLazyLoading"    : "true",
-                                        "allowUpload"           : "true",
-                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
-                                        "jcr:content"           : {
+                                        "disableLazyLoading": "true",
+                                        "allowUpload": "true",
+                                        "sling:resourceType": "wcm/core/components/policy/policy",
+                                        "jcr:content": {
                                             "jcr:primaryType": "nt:unstructured"
                                         },
-                                        "plugins"               : {
+                                        "plugins": {
                                             "jcr:primaryType": "nt:unstructured"
                                         }
                                     },
                                     "policy_1478854677330": {
-                                        "jcr:primaryType"       : "nt:unstructured",
-                                        "jcr:title"             : "images",
-                                        "uuidDisabled"           : true,
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "jcr:title": "images",
+                                        "uuidDisabled": true,
                                         "allowedRenditionWidths": [
                                             128,
                                             256,
@@ -106,13 +106,13 @@
                                             1920,
                                             2048
                                         ],
-                                        "disableLazyLoading"    : "false",
-                                        "allowUpload"           : "true",
-                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
-                                        "jcr:content"           : {
+                                        "disableLazyLoading": "false",
+                                        "allowUpload": "true",
+                                        "sling:resourceType": "wcm/core/components/policy/policy",
+                                        "jcr:content": {
                                             "jcr:primaryType": "nt:unstructured"
                                         },
-                                        "plugins"               : {
+                                        "plugins": {
                                             "jcr:primaryType": "nt:unstructured"
                                         }
                                     },
@@ -129,44 +129,44 @@
                         }
                     }
                 },
-                "templates"      : {
+                "templates": {
                     "jcr:primaryType": "cq:Page",
-                    "testtemplate"   : {
+                    "testtemplate": {
                         "jcr:primaryType": "cq:Template",
-                        "structure"      : {
+                        "structure": {
                             "jcr:primaryType": "cq:Page",
-                            "jcr:createdBy"  : "admin",
-                            "jcr:created"    : "Fri Dec 15 2017 18:48:22 GMT+0100",
-                            "jcr:content"    : {
-                                "jcr:primaryType"   : "cq:PageContent",
-                                "jcr:createdBy"     : "admin",
-                                "cq:template"       : "/conf/coretest/settings/wcm/templates/testtemplate",
+                            "jcr:createdBy": "admin",
+                            "jcr:created": "Fri Dec 15 2017 18:48:22 GMT+0100",
+                            "jcr:content": {
+                                "jcr:primaryType": "cq:PageContent",
+                                "jcr:createdBy": "admin",
+                                "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate",
                                 "sling:resourceType": "core/wcm/components/page",
-                                "root"              : {
-                                    "jcr:primaryType"   : "nt:unstructured",
+                                "root": {
+                                    "jcr:primaryType": "nt:unstructured",
                                     "sling:resourceType": "wcm/foundation/components/responsivegrid",
-                                    "image_template"             : {
-                                        "jcr:primaryType"   : "nt:unstructured",
-                                        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                                    "image_template": {
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "fileReference": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                                         "sling:resourceType": "core/wcm/components/image/v3/image",
-                                        "alt"               : "Adobe Logo",
-                                        "jcr:title"         : "Adobe Logo",
-                                        "linkURL"           : "/content/test"
+                                        "alt": "Adobe Logo",
+                                        "jcr:title": "Adobe Logo",
+                                        "linkURL": "/content/test"
                                     }
                                 }
                             }
                         },
-                        "policies"       : {
+                        "policies": {
                             "jcr:primaryType": "cq:Page",
-                            "jcr:content"    : {
-                                "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:content": {
+                                "jcr:primaryType": "nt:unstructured",
                                 "sling:resourceType": "wcm/core/components/policies/mappings",
-                                "root"              : {
-                                    "jcr:primaryType"   : "nt:unstructured",
+                                "root": {
+                                    "jcr:primaryType": "nt:unstructured",
                                     "sling:resourceType": "wcm/core/components/policies/mapping",
-                                    "image_template"             : {
-                                        "jcr:primaryType"   : "nt:unstructured",
-                                        "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
+                                    "image_template": {
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "cq:policy": "coretest/components/content/image/policy_1478854677326",
                                         "sling:resourceType": "wcm/core/components/policies/mapping"
                                     }
                                 }

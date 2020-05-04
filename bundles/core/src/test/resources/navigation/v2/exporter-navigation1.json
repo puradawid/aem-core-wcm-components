@@ -1,89 +1,175 @@
 {
-  "items": [
-    {
-      "path": "/content/navigation",
-      "description": null,
-      "lastModified": null,
-      "title": "Navigation",
-      "active": true,
-      "children": [
+    "id": "navigation-931c5890c8",
+    "items": [
         {
-          "path": "/content/navigation/navigation-1",
-          "description": null,
-          "lastModified": null,
-          "title": "Navigation 1",
-          "active": false,
-          "children": [
-            {
-              "path": "/content/navigation/navigation-1/navigation-1-1",
-              "description": null,
-              "lastModified": null,
-              "title": "Navigation 1.1",
-              "active": false,
-              "children": [
+            "id": "navigation-931c5890c8-item-91865aa059",
+            "path": "/content/navigation",
+            "link": {
+                "url": "/core/content/navigation.html",
+                "valid": true
+            },
+            "children": [
                 {
-                  "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
-                  "description": null,
-                  "lastModified": null,
-                  "title": "Navigation 1.1.1",
-                  "active": false,
-                  "children": [],
-                  "level": 3,
-                  "link": { "valid": true, "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html" }
+                    "id": "navigation-931c5890c8-item-4885a69181",
+                    "path": "/content/navigation/navigation-1",
+                    "link": {
+                        "url": "/core/navigation-1-vanity",
+                        "valid": true
+                    },
+                    "children": [
+                        {
+                            "id": "navigation-931c5890c8-item-6a9edbe69f",
+                            "path": "/content/navigation/navigation-1/navigation-1-1",
+                            "link": {
+                                "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
+                                "valid": true
+                            },
+                            "children": [
+                                {
+                                    "id": "navigation-931c5890c8-item-dfa9068b94",
+                                    "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
+                                    "link": {
+                                        "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
+                                        "valid": true
+                                    },
+                                    "children": [],
+                                    "level": 3,
+                                    "active": false,
+                                    "title": "Navigation 1.1.1",
+                                    "dataLayer": {
+                                        "navigation-931c5890c8-item-dfa9068b94": {
+                                            "type": "cq:PageContent",
+                                            "title": "Navigation 1.1.1",
+                                            "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"
+                                        }
+                                    },
+                                    ":type": "cq:PageContent"
+                                },
+                                {
+                                    "id": "navigation-931c5890c8-item-8b011a2258",
+                                    "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
+                                    "link": {
+                                        "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
+                                        "valid": true
+                                    },
+                                    "children": [
+                                        {
+                                            "id": "navigation-931c5890c8-item-aa180e7f2f",
+                                            "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
+                                            "link": {
+                                                "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
+                                                "valid": true
+                                            },
+                                            "children": [],
+                                            "level": 4,
+                                            "active": false,
+                                            "title": "Navigation 1.1.2.2.1",
+                                            "dataLayer": {
+                                                "navigation-931c5890c8-item-aa180e7f2f": {
+                                                    "type": "cq:PageContent",
+                                                    "title": "Navigation 1.1.2.2.1",
+                                                    "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"
+                                                }
+                                            },
+                                            ":type": "cq:PageContent"
+                                        },
+                                        {
+                                            "id": "navigation-931c5890c8-item-1526eaa1b9",
+                                            "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
+                                            "link": {
+                                                "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
+                                                "valid": true
+                                            },
+                                            "children": [],
+                                            "level": 4,
+                                            "active": false,
+                                            "title": "Navigation 1.1.2.3",
+                                            "dataLayer": {
+                                                "navigation-931c5890c8-item-1526eaa1b9": {
+                                                    "type": "cq:PageContent",
+                                                    "title": "Navigation 1.1.2.3",
+                                                    "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"
+                                                }
+                                            },
+                                            ":type": "cq:PageContent"
+                                        }
+                                    ],
+                                    "level": 3,
+                                    "active": false,
+                                    "title": "Navigation 1.1.2",
+                                    "dataLayer": {
+                                        "navigation-931c5890c8-item-8b011a2258": {
+                                            "type": "cq:PageContent",
+                                            "title": "Navigation 1.1.2",
+                                            "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html"
+                                        }
+                                    },
+                                    ":type": "cq:PageContent"
+                                }
+                            ],
+                            "level": 2,
+                            "active": false,
+                            "title": "Navigation 1.1",
+                            "dataLayer": {
+                                "navigation-931c5890c8-item-6a9edbe69f": {
+                                    "type": "cq:PageContent",
+                                    "title": "Navigation 1.1",
+                                    "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1.html"
+                                }
+                            },
+                            ":type": "cq:PageContent"
+                        }
+                    ],
+                    "level": 1,
+                    "active": false,
+                    "title": "Navigation 1",
+                    "dataLayer": {
+                        "navigation-931c5890c8-item-4885a69181": {
+                            "type": "cq:PageContent",
+                            "title": "Navigation 1",
+                            "linkUrl": "/core/navigation-1-vanity"
+                        }
+                    },
+                    ":type": "cq:PageContent"
                 },
                 {
-                  "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
-                  "description": null,
-                  "lastModified": null,
-                  "title": "Navigation 1.1.2",
-                  "active": false,
-                  "children": [
-                    {
-                      "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
-                      "description": null,
-                      "lastModified": null,
-                      "title": "Navigation 1.1.2.2.1",
-                      "active": false,
-                      "children": [],
-                      "level": 4,
-                      "link": { "valid": true, "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html" }
+                    "id": "navigation-931c5890c8-item-196ac37bae",
+                    "path": "/content/navigation/navigation-2",
+                    "link": {
+                        "url": "/core/content/navigation/navigation-2.html",
+                        "valid": true
                     },
-                    {
-                      "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
-                      "description": null,
-                      "lastModified": null,
-                      "title": "Navigation 1.1.2.3",
-                      "active": false,
-                      "children": [],
-                      "level": 4,
-                      "link": { "valid": true, "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html" }
-                    }
-                  ],
-                  "level": 3,
-                  "link": { "valid": true, "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html" }
+                    "children": [],
+                    "level": 1,
+                    "active": false,
+                    "title": "Navigation 2",
+                    "dataLayer": {
+                        "navigation-931c5890c8-item-196ac37bae": {
+                            "type": "cq:PageContent",
+                            "title": "Navigation 2",
+                            "linkUrl": "/core/content/navigation/navigation-2.html"
+                        }
+                    },
+                    ":type": "cq:PageContent"
                 }
-              ],
-              "level": 2,
-              "link": { "valid": true, "url": "/core/content/navigation/navigation-1/navigation-1-1.html" }
-            }
-          ],
-          "level": 1,
-          "link": { "valid": true, "url": "/core/navigation-1-vanity" }
-        },
-        {
-          "path": "/content/navigation/navigation-2",
-          "description": null,
-          "lastModified": null,
-          "title": "Navigation 2",
-          "active": false,
-          "children": [],
-          "level": 1,
-          "link": { "valid": true, "url": "/core/content/navigation/navigation-2.html" }
+            ],
+            "level": 0,
+            "active": true,
+            "title": "Navigation",
+            "dataLayer": {
+                "navigation-931c5890c8-item-91865aa059": {
+                    "type": "cq:PageContent",
+                    "title": "Navigation",
+                    "linkUrl": "/core/content/navigation.html"
+                }
+            },
+            ":type": "cq:PageContent"
         }
-      ],
-      "level": 0,
-      "link": { "valid": true, "url": "/core/content/navigation.html" }
-    }
-  ],
-  ":type": "core/wcm/components/navigation/v2/navigation"
+    ],
+    "dataLayer": {
+        "navigation-931c5890c8": {
+            "type": "core/wcm/components/navigation/v2/navigation"
+        }
+    },
+    ":type": "core/wcm/components/navigation/v2/navigation"
 }

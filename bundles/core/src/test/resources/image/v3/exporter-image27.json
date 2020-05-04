@@ -1,4 +1,5 @@
 {
+    "id": "image-8fe05d400b",
     "alt": "Adobe Logo",
     "areas": [],
     "lazyEnabled": false,
@@ -9,5 +10,13 @@
     "widths": [
         600
     ],
+    "dataLayer": {
+        "image-8fe05d400b": {
+            "lastModifiedDate": "2017-03-20T10:20:39Z",
+            "linkUrl": "https://www.adobe.com",
+            "type": "core/wcm/components/image/v3/image",
+            "title": "Adobe Logo"
+        }
+    },
     ":type": "core/wcm/components/image/v3/image"
 }

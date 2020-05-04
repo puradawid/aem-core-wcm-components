@@ -27,7 +27,7 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
  * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
 @ConsumerType
-public interface Button extends ComponentExporter {
+public interface Button extends Component {
 
     /**
      * Returns the button text.
@@ -90,4 +90,5 @@ public interface Button extends ComponentExporter {
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
+
 }

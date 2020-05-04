@@ -43,6 +43,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Heading;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -56,6 +57,8 @@ import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -102,7 +105,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @Self
     private LinkHandler linkHandler;
     protected Link link;
-    
+
     @OSGiService
     private ModelFactory modelFactory;
 
@@ -123,7 +126,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
             link = linkHandler.getInvalid();
             populateActions();
-            if (actions.size() > 0) {
+            if (!actions.isEmpty()) {
                 ListItem firstAction = actions.get(0);
                 if (firstAction != null) {
                     targetPage = pageManager.getPage(firstAction.getPath());
@@ -150,6 +153,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             if (titleFromPage) {
                 if (targetPage != null) {
                     title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+                } else if (actionsEnabled && !actions.isEmpty()) {
+                    ListItem firstAction = actions.get(0);
+                    if (firstAction != null) {
+                        title = firstAction.getTitle();
+                    }
                 } else {
                     title = null;
                 }
@@ -215,9 +223,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
     }
-    
+
     protected ListItem newAction(Resource actionRes) {
-        return new Action(actionRes);
+        return new Action(actionRes, getId());
     }
 
     @Override
@@ -296,13 +304,39 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return request.getResource().getResourceType();
     }
 
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getLinkURL();
+    }
+
+    @Override
+    public String getDataLayerDescription() {
+        return getDescription();
+    }
+
+
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
-    public class Action implements ListItem {
+    public class Action extends AbstractListItemImpl implements ListItem {
+        private static final String CTA_ID_PREFIX = "cta";
         private final ValueMap properties;
         private final String title;
         protected final Link actionLink;
 
-        public Action(Resource actionRes) {
+        private String parentId;
+        private String id;
+
+        public Action(Resource actionRes, String parentId) {
+            super(parentId, actionRes);
+            this.parentId = parentId;
             properties = actionRes.getValueMap();
             title = properties.get(PN_ACTION_TEXT, String.class);
             actionLink = linkHandler.getLink(actionRes, PN_ACTION_LINK);
@@ -333,5 +367,36 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             return actionLink.getURL();
         }
 
+        @Nullable
+        @Override
+        public String getId() {
+            if (id == null) {
+                if (resource != null) {
+                    ValueMap properties = resource.getValueMap();
+                    id = properties.get(com.adobe.cq.wcm.core.components.models.Component.PN_ID, String.class);
+                }
+                if (StringUtils.isEmpty(id)) {
+                    String prefix = StringUtils.join(parentId, ID_SEPARATOR, CTA_ID_PREFIX);
+                    id = Utils.generateId(prefix, resource.getPath());
+                } else {
+                    id = StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(id)), " ", ID_SEPARATOR);
+                }
+            }
+            return id;
+        }
+
+        /*
+         * DataLayerProvider implementation of field getters
+         */
+
+        @Override
+        public String getDataLayerLinkUrl() {
+            return getURL();
+        }
+
+        @Override
+        public String getDataLayerTitle() {
+            return getTitle();
+        }
     }
 }

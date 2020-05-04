@@ -52,14 +52,14 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         Collection<Page> pages = getPages();
         for (Page page : pages) {
             if (page != null) {
-                listItems.add(newPageListItem(linkHandler, page));
+                listItems.add(newPageListItem(linkHandler, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
             }
         }
         return listItems;
     }
-    
-    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page) {
-        return new PageListItemImpl(linkHandler, page);
+
+    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled) {
+        return new PageListItemImpl(linkHandler, page, parentId, isShadowingDisabled);
     }
 
     private Collection<Page> getPages() {
@@ -69,5 +69,4 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
         return listItems;
     }
-
 }

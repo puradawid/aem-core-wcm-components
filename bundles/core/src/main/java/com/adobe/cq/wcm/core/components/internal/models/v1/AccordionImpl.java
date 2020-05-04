@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -33,6 +34,7 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Heading;
 import com.adobe.cq.wcm.core.components.models.Accordion;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.designer.Style;
 
 @Model(
@@ -66,7 +68,12 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
     private String[] expandedItemNames;
 
     /**
-     * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the HTML element
+     * The cached model IDs of the expanded items for which there is a valid matching child resource.
+     */
+    private String[] expandedItemIds;
+
+    /**
+     * The {@link com.adobe.cq.wcm.core.components.internal.Heading} object for the HTML element
      * to use for accordion headers.
      */
     private Heading heading;
@@ -109,5 +116,35 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
             return heading.getElement();
         }
         return null;
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String[] getDataLayerShownItems() {
+        if (expandedItems == null) {
+            return new String[0];
+        }
+
+        if (expandedItemIds == null) {
+            List<String> expandedItemsName = Arrays.asList(expandedItems);
+            List<ListItem> items = this.getItems();
+
+            if (items != null) {
+                List<String> expandedItemIdsList = items.stream()
+                    .filter(item -> expandedItemsName.contains(item.getName()))
+                    .map(item -> item.getDataLayer().getId())
+                    .collect(Collectors.toList());
+
+                expandedItemIds = expandedItemIdsList.toArray(new String[expandedItemIdsList.size()]);
+            } else {
+                expandedItemIds = new String[0];
+            }
+
+        }
+
+        return Arrays.copyOf(expandedItemIds, expandedItemIds.length);
     }
 }

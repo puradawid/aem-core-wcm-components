@@ -37,8 +37,8 @@ public class NavigationImpl extends com.adobe.cq.wcm.core.components.internal.mo
 
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v2/navigation";
 
-    protected NavigationItem newNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children) {
-        return new NavigationItemImpl(page, active, linkHandler, level, children);
+    protected NavigationItem newNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String parentId, boolean isShadowingDisabled) {
+        return new NavigationItemImpl(page, active, linkHandler, level, children, parentId, isShadowingDisabled);
     }
 
 }

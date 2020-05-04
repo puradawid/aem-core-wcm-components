@@ -18,9 +18,10 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 import javax.jcr.RangeIterator;
 
@@ -32,7 +33,12 @@ import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.*;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,7 +61,7 @@ import com.day.cq.wcm.msm.api.LiveRelationshipManager;
        adapters = {Navigation.class, ComponentExporter.class},
        resourceType = {NavigationImpl.RESOURCE_TYPE})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class NavigationImpl implements Navigation {
+public class NavigationImpl extends AbstractComponentImpl implements Navigation {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v1/navigation";
 
@@ -90,6 +96,7 @@ public class NavigationImpl implements Navigation {
     private String navigationRootPage;
     private List<NavigationItem> items;
     private boolean skipNavigationRoot;
+    private boolean isShadowingDisabled;
     private int structureStart;
 
     @PostConstruct
@@ -111,6 +118,8 @@ public class NavigationImpl implements Navigation {
                 structureStart = 0;
             }
         }
+        isShadowingDisabled = properties.get(PageListItemImpl.PN_DISABLE_SHADOWING,
+            currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
     @Override
@@ -157,8 +166,8 @@ public class NavigationImpl implements Navigation {
         return Collections.unmodifiableList(items);
     }
 
-    protected NavigationItem newNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children) {
-        return new NavigationItemImpl(page, active, linkHandler, level, children);
+    protected NavigationItem newNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String parentId, boolean isShadowingDisabled) {
+        return new NavigationItemImpl(page, active, linkHandler, level, children, parentId, isShadowingDisabled);
     }
 
     @Override
@@ -192,7 +201,7 @@ public class NavigationImpl implements Navigation {
                 if (structureStart == 0) {
                     level = level + 1;
                 }
-                pages.add(newNavigationItem(page, isSelected, linkHandler, level, children));
+                pages.add(newNavigationItem(page, isSelected, linkHandler, level, children, getId(), isShadowingDisabled));
             }
         }
         return pages;
@@ -207,7 +216,7 @@ public class NavigationImpl implements Navigation {
         }
         if (structureStart == 0) {
             boolean isSelected = checkSelected(navigationRoot.page);
-            NavigationItem root = newNavigationItem(navigationRoot.page, isSelected, linkHandler, 0, itemTree);
+            NavigationItem root = newNavigationItem(navigationRoot.page, isSelected, linkHandler, 0, itemTree, getId(), isShadowingDisabled);
             itemTree = new ArrayList<>();
             itemTree.add(root);
         }

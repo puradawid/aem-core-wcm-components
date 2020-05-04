@@ -16,8 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,9 +25,10 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Breadcrumb;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
-
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+
+import static org.junit.Assert.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
 public class BreadcrumbImplTest {
@@ -46,13 +45,13 @@ public class BreadcrumbImplTest {
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
     protected String testBase;
-    
+
     @BeforeEach
     protected void setUp() {
         testBase = TEST_BASE;
         internalSetup();
     }
-    
+
     protected void internalSetup() {
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, "/content/breadcrumb/women");
     }
@@ -112,6 +111,7 @@ public class BreadcrumbImplTest {
     }
 
     protected Breadcrumb getBreadcrumbUnderTest(String resourcePath, Object... properties) {
+        Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);

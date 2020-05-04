@@ -47,6 +47,7 @@ import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -89,7 +90,7 @@ public class SearchResultServletTest {
         underTest = new SearchResultServlet();
         when(mockQueryBuilder.createQuery(any(), any())).thenReturn(mockQuery);
         when(mockQuery.getResult()).thenReturn(mockSearchResult);
-        when(mockSearchResult.getHits()).thenReturn(Arrays.asList(new Hit[]{mockHit}));
+        when(mockSearchResult.getHits()).thenReturn(Arrays.asList(new Hit[] { mockHit }));
         Utils.setInternalState(underTest, "queryBuilder", mockQueryBuilder);
         Utils.setInternalState(underTest, "languageManager", new MockLanguageManager());
         Utils.setInternalState(underTest, "relationshipManager", mockLiveRelationshipManager);
@@ -97,6 +98,7 @@ public class SearchResultServletTest {
 
     @Test
     public void testSimpleSearch() throws Exception {
+        com.adobe.cq.wcm.core.components.Utils.enableDataLayerForOldAemContext(context, true);
         Resource resource = context.currentResource(TEST_ROOT_EN);
         when(mockHit.getResource()).thenReturn(resource);
         MockSlingHttpServletRequest request = context.request();
@@ -116,6 +118,7 @@ public class SearchResultServletTest {
 
     @Test
     public void testTemplateBasedSearch() throws Exception {
+        com.adobe.cq.wcm.core.components.Utils.enableDataLayerForOldAemContext(context, true);
         Resource resource = context.currentResource(TEST_TEMPLATE_EN);
         when(mockHit.getResource()).thenReturn(resource);
         MockSlingHttpServletRequest request = context.request();
@@ -153,21 +156,25 @@ public class SearchResultServletTest {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Item implements ListItem {
         private Link link;
+        private String id;
         private String url;
         private String title;
-        private String path;
-        private String description;
-        private String lastModified;
-        private String name;
 
         public Item() {
         }
-        
+
         @Override
         public @NotNull Link getLink() {
             return link;
+        }
+
+        @Nullable
+        @Override
+        public String getId() {
+            return id;
         }
 
         @Nullable
@@ -184,7 +191,7 @@ public class SearchResultServletTest {
     }
 
     private static class Link implements com.adobe.cq.wcm.core.components.commons.link.Link {
-        
+
         private boolean valid;
         private String url;
         private Map<String,String> htmlAttributes;
@@ -209,7 +216,7 @@ public class SearchResultServletTest {
         public @Nullable Page getTargetPage() {
             return targetPage;
         }
-        
+
     }
-    
+
 }

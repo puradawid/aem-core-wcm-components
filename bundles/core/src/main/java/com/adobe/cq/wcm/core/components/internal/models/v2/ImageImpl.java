@@ -108,7 +108,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if (smartSizes.length > 0) {
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
-            } 
+            }
             srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                 SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                 (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
@@ -189,5 +189,4 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt ) {
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }
-
 }

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +47,7 @@ import com.day.cq.wcm.api.designer.Style;
        resourceType = {LanguageNavigationImpl.RESOURCE_TYPE})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME ,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class LanguageNavigationImpl implements LanguageNavigation {
+public class LanguageNavigationImpl extends AbstractComponentImpl implements LanguageNavigation {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/languagenavigation/v1/languagenavigation";
 
@@ -64,10 +65,11 @@ public class LanguageNavigationImpl implements LanguageNavigation {
 
     @Self
     private LinkHandler linkHandler;
-    
+
     private String navigationRoot;
     private int structureDepth;
     private Page rootPage;
+    private boolean isShadowingDisabled;
     private List<NavigationItem> items;
     private int startLevel;
 
@@ -75,6 +77,8 @@ public class LanguageNavigationImpl implements LanguageNavigation {
     private void initModel() {
         navigationRoot = properties.get(PN_NAVIGATION_ROOT, currentStyle.get(PN_NAVIGATION_ROOT, String.class));
         structureDepth = properties.get(PN_STRUCTURE_DEPTH, currentStyle.get(PN_STRUCTURE_DEPTH, 1));
+        isShadowingDisabled = properties.get(PageListItemImpl.PN_DISABLE_SHADOWING,
+                currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
     @Override
@@ -117,15 +121,15 @@ public class LanguageNavigationImpl implements LanguageNavigation {
                 if (localizedPage != null) {
                     page = localizedPage;
                 }
-                pages.add(newLanguageNavigationItem(page, active, linkHandler, level, children, title));
+                pages.add(newLanguageNavigationItem(page, active, linkHandler, level, children, title, getId(), isShadowingDisabled));
             }
         }
 
         return pages;
     }
-    
-    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String title) {
-        return new LanguageNavigationItemImpl(page, active, linkHandler, level, children, title);
+
+    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String title, String parentId, boolean isShadowingDisabled) {
+        return new LanguageNavigationItemImpl(page, active, linkHandler, level, children, title, parentId, isShadowingDisabled);
     }
 
     private Page getLocalizedPage(Page page, Page languageRoot) {

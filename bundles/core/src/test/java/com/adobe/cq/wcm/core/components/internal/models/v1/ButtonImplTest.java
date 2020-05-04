@@ -82,6 +82,7 @@ public class ButtonImplTest {
     }
 
     protected Button getButtonUnderTest(Object... properties) {
+        Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(ButtonImplTest.BUTTON_1);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);

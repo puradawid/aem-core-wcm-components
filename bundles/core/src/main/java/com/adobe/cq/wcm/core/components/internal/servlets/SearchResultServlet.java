@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.jcr.RangeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -42,6 +43,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.jackson.DefaultMethodSkippingModuleProvider;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
@@ -212,7 +214,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                     Resource hitRes = hit.getResource();
                     Page page = getPage(hitRes);
                     if (page != null) {
-                        results.add(new PageListItemImpl(linkHandler, page));
+                        results.add(new PageListItemImpl(linkHandler, page, getId(searchResource), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
                     }
                 } catch (RepositoryException e) {
                     LOGGER.error("Unable to retrieve search results for query.", e);
@@ -220,6 +222,13 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
             }
         }
         return results;
+    }
+
+    private String getId(Resource resource) {
+        if (resource == null) {
+            return null;
+        }
+        return Utils.generateId("search", resource.getPath());
     }
 
     private String getSearchRootPagePath(String searchRoot, Page currentPage) {

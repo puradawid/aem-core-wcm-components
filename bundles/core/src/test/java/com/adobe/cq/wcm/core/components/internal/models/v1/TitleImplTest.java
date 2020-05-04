@@ -16,9 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,9 +24,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Title;
-
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(AemContextExtension.class)
 public class TitleImplTest {
@@ -63,6 +62,7 @@ public class TitleImplTest {
     protected void testExportedType() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE);
         assertEquals(resourceType, title.getExportedType());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE));
     }
 
     @Test
@@ -113,12 +113,14 @@ public class TitleImplTest {
 
     @Test
     protected void testTitleWithLinksDisabled() {
+        Utils.enableDataLayer(context, true);
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2,
                 Title.PN_TITLE_LINK_DISABLED, true);
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, "title-linkdisabled"));
     }
 
     protected Title getTitleUnderTest(String resourcePath, Object ... properties) {
+        Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);

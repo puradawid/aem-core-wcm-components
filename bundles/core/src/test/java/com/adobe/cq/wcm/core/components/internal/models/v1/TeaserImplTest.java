@@ -15,18 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import org.apache.sling.api.resource.Resource;
@@ -46,35 +36,48 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
-
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
+
 @ExtendWith(AemContextExtension.class)
 public class TeaserImplTest {
 
     private static final String TEST_BASE = "/teaser";
-    protected  static final String CONTENT_ROOT = "/content";
-    protected  static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.png";
-    protected  static final String PNG_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_BINARY_NAME;
-    protected  static final String CONTEXT_PATH = "/core";
-    protected  static final String TEST_ROOT_PAGE = "/content/teasers";
-    protected  static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
-    protected  static final String TITLE = "Teaser";
-    protected  static final String PRETITLE = "Teaser's Pretitle";
+    protected static final String CONTENT_ROOT = "/content";
+    protected static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.png";
+    protected static final String PNG_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_BINARY_NAME;
+    protected static final String CONTEXT_PATH = "/core";
+    protected static final String TEST_ROOT_PAGE = "/content/teasers";
+    protected static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
+    protected static final String TITLE = "Teaser";
+    protected static final String PRETITLE = "Teaser's Pretitle";
     protected static final String DESCRIPTION = "Description";
-    protected  static final String LINK = "https://www.adobe.com";
-    protected  static final String TEASER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-1";
-    protected  static final String TEASER_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-2";
-    protected  static final String TEASER_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-3";
-    protected  static final String TEASER_4 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-4";
-    protected  static final String TEASER_5 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-5";
-    protected  static final String TEASER_6 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-6";
-    protected  static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
-    protected  static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
-    protected  static final String TEASER_9 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-9";
+    protected static final String LINK = "https://www.adobe.com";
+    protected static final String TEASER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-1";
+    protected static final String TEASER_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-2";
+    protected static final String TEASER_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-3";
+    protected static final String TEASER_4 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-4";
+    protected static final String TEASER_5 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-5";
+    protected static final String TEASER_6 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-6";
+    protected static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
+    protected static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
+    protected static final String TEASER_9 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-9";
+    protected static final String TEASER_10 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-10";
+    protected static final String TEASER_11 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-11";
+    protected static final String TEASER_12 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-12";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
     protected TestLogger testLogger;
@@ -229,7 +232,35 @@ public class TeaserImplTest {
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser1"));
     }
 
+    @Test
+    void testTeaserWithTitleNotFromLinkedPageAndNoActions() {
+        Teaser teaser = getTeaserUnderTest(TEASER_10);
+        assertEquals("Teaser", teaser.getTitle());
+        assertTrue(teaser.getActions().isEmpty());
+    }
+
+    @Test
+    void testTeaserWithTitleNotFromLinkedPageAndActions() {
+        Teaser teaser = getTeaserUnderTest(TEASER_11);
+        assertEquals("Teaser", teaser.getTitle());
+        List<ListItem> actions = teaser.getActions();
+        assertEquals("http://www.adobe.com", actions.get(0).getPath());
+        assertEquals("Adobe", actions.get(0).getTitle());
+        assertEquals("/content/teasers", actions.get(1).getPath());
+        assertEquals("Teasers", actions.get(1).getTitle());
+    }
+
+    @Test
+    void testTeaserWithTitleFromLinkedPageAndActions() {
+        Teaser teaser = getTeaserUnderTest(TEASER_12);
+        assertEquals("Adobe", teaser.getTitle());
+        List<ListItem> actions = teaser.getActions();
+        assertEquals("http://www.adobe.com", actions.get(0).getPath());
+        assertEquals("Adobe", actions.get(0).getTitle());
+    }
+
     protected Teaser getTeaserUnderTest(String resourcePath, Object... properties) {
+        Utils.enableDataLayer(context, true);
         MockSlingHttpServletRequest request = context.request();
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {

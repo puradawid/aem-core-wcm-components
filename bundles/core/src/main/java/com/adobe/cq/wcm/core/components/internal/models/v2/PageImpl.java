@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -59,6 +60,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v2/page";
     protected static final String PN_CLIENTLIBS_JS_HEAD = "clientlibsJsHead";
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
+    public static final String PN_MAIN_CONTENT_SELECTOR_PROP = "mainContentSelector";
 
     private Boolean hasCloudconfigSupport;
 
@@ -204,5 +206,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             }
         }
         return hasCloudconfigSupport;
+    }
+
+    @Override
+    public String getMainContentSelector() {
+        if (currentStyle != null) {
+            return currentStyle.get(PN_MAIN_CONTENT_SELECTOR_PROP, String.class);
+        }
+        return null;
     }
 }

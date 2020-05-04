@@ -1,15 +1,15 @@
 {
     "image": {
         "jcr:primaryType": "sling:Folder",
-        "v3"             : {
+        "v3": {
             "jcr:primaryType": "nt:unstructured",
-            "image"          : {
-                "jcr:primaryType"        : "cq:Component",
-                "jcr:title"              : "Image (v3)",
+            "image": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Image (v3)",
                 "sling:resourceSuperType": "core/wcm/components/image",
-                "jcr:description"        : "Smart Adaptive Image",
-                "cq:icon"                : "image",
-                "componentGroup"         : ".core-wcm"
+                "jcr:description": "Smart Adaptive Image",
+                "cq:icon": "image",
+                "componentGroup": ".core-wcm"
             }
         }
     }

@@ -49,14 +49,14 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     }
 
     protected ListItem newAction(Resource actionRes) {
-        return new Action(actionRes);
+        return new Action(actionRes, getId());
     }
 
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
     public class Action extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl.Action {
         
-        public Action(Resource actionRes) {
-            super(actionRes);
+        public Action(Resource actionRes, String parentId) {
+            super(actionRes, parentId);
         }
 
         @Override

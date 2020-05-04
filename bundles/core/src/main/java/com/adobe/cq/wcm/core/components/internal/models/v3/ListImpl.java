@@ -34,8 +34,8 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v3/list";
 
-    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page) {
-        return new PageListItemImpl(linkHandler, page);
+    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled) {
+        return new PageListItemImpl(linkHandler, page, parentId, isShadowingDisabled);
     }
 
 }

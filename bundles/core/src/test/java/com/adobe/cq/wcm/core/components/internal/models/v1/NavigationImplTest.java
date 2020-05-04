@@ -15,12 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -43,9 +37,15 @@ import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
-
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(AemContextExtension.class)
 public class NavigationImplTest {
@@ -77,6 +77,8 @@ public class NavigationImplTest {
     private static final String NAV_COMPONENT_13 = TEST_ROOT + "/jcr:content/root/navigation-component-13";
     private static final String NAV_COMPONENT_14 = TEST_ROOT + "/jcr:content/root/navigation-component-14";
     private static final String NAV_COMPONENT_15 = "/content/navigation-livecopy/jcr:content/root/navigation-component-15";
+    private static final String NAV_COMPONENT_16 = TEST_ROOT + "/jcr:content/root/navigation-component-16";
+    private static final String NAV_COMPONENT_17 = TEST_ROOT + "/jcr:content/root/navigation-component-17";
 
     protected String testBase;
     protected String resourceType;
@@ -323,6 +325,56 @@ public class NavigationImplTest {
     }
 
     /**
+     * Test to verify #945: if shadowing is disabled Redirecting pages should be displayed instead of redirect targets
+     */
+    @Test
+    void testRedirectWithDisabledShadowing() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_16);
+        Object[][] expectedPages = {
+            {"/content/navigation-redirect", 0, true, "/content/navigation-redirect.html"},
+            {"/content/navigation-redirect/navigation-1", 1, false, "/navigation-1-vanity"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1", 2, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-1", 3, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2", 3, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1", 4, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation16"));
+    }
+
+    /**
+     * Test to verify #945: if shadowing is enabled Redirect target pages should be displayed instead of original pages
+     */
+    @Test
+    void testRedirectWithEnabledShadowing() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_17);
+        Object[][] expectedPages = {
+            {"/content/navigation", 0, true, "/content/navigation.html"},
+            {"/content/navigation-redirect/navigation-1", 1, false, "/navigation-1-vanity"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1", 2, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1", 4, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation17"));
+    }
+
+    /**
      * Test to verify #189 : Null Pointer Exception in NavigationImpl when Redirect Target is not found
      */
     @Test
@@ -393,6 +445,7 @@ public class NavigationImplTest {
     }
 
     protected Navigation getNavigationUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath("/core");

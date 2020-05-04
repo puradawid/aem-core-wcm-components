@@ -28,7 +28,7 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Title extends ComponentExporter {
+public interface Title extends Component {
 
     /**
      * Name of the configuration policy property that will store the default value for this title's HTML element type.

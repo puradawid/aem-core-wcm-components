@@ -22,7 +22,6 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -31,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Image extends ComponentExporter {
+public interface Image extends Component {
 
     /**
      * Name of the configuration policy property that will store the allowed rendition widths for an image.
@@ -258,7 +257,8 @@ public interface Image extends ComponentExporter {
      * @return the alternative image widths (in pixels)
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
-    default int @NotNull [] getWidths() {
+    @NotNull
+    default int[] getWidths() {
         throw new UnsupportedOperationException();
     }
 

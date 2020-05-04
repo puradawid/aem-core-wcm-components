@@ -4,5 +4,5 @@
     jcr:description="Allows visitors to enter text information with AMP support"
     jcr:primaryType="cq:Component"
     jcr:title="Form Text (AMP v1)"
-    sling:resourceSuperType="/core/wcm/components/form/text/v2/text"
+    sling:resourceSuperType="core/wcm/components/form/text/v2/text"
     componentGroup=".core-wcm-ext-amp-form"/>

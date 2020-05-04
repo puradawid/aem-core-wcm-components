@@ -28,17 +28,17 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class ResourceListItemImpl implements ListItem {
+public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
     protected Link link;
     protected String title;
     protected String description;
     protected Calendar lastModified;
-    protected String path;
     protected String name;
 
     public ResourceListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource,
-            @NotNull LinkHandler linkHandler) {
+                @NotNull LinkHandler linkHandler, String parentId) {
+        super(parentId, resource);
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
             title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
@@ -49,7 +49,7 @@ public class ResourceListItemImpl implements ListItem {
         name = resource.getName();
         link = linkHandler.getInvalid();
     }
-    
+
     @Override
     @NotNull
     @JsonIgnore
@@ -86,5 +86,19 @@ public class ResourceListItemImpl implements ListItem {
     @Override
     public String getName() {
         return name;
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getURL();
     }
 }

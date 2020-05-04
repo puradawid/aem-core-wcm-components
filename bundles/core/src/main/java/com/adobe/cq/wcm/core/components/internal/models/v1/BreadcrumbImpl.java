@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -41,7 +42,7 @@ import com.day.cq.wcm.api.designer.Style;
        adapters = {Breadcrumb.class, ComponentExporter.class},
        resourceType = {BreadcrumbImpl.RESOURCE_TYPE_V1, BreadcrumbImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class BreadcrumbImpl implements Breadcrumb {
+public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb {
 
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
     protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
@@ -68,6 +69,7 @@ public class BreadcrumbImpl implements Breadcrumb {
     private boolean showHidden;
     private boolean hideCurrent;
     private int startLevel;
+    private boolean isShadowingDisabled;
     private List<NavigationItem> items;
 
     @PostConstruct
@@ -75,6 +77,8 @@ public class BreadcrumbImpl implements Breadcrumb {
         startLevel = properties.get(PN_START_LEVEL, currentStyle.get(PN_START_LEVEL, PROP_START_LEVEL_DEFAULT));
         showHidden = properties.get(PN_SHOW_HIDDEN, currentStyle.get(PN_SHOW_HIDDEN, PROP_SHOW_HIDDEN_DEFAULT));
         hideCurrent = properties.get(PN_HIDE_CURRENT, currentStyle.get(PN_HIDE_CURRENT, PROP_HIDE_CURRENT_DEFAULT));
+        isShadowingDisabled = properties.get(PageListItemImpl.PN_DISABLE_SHADOWING,
+            currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
     @Override
@@ -102,7 +106,7 @@ public class BreadcrumbImpl implements Breadcrumb {
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = newBreadcrumbItem(page, isActivePage, linkHandler, currentLevel, Collections.emptyList());
+                    NavigationItem navigationItem = newBreadcrumbItem(page, isActivePage, linkHandler, currentLevel, Collections.emptyList(), getId(), isShadowingDisabled);
                     items.add(navigationItem);
                 }
             }
@@ -110,9 +114,9 @@ public class BreadcrumbImpl implements Breadcrumb {
         }
         return items;
     }
-    
-    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children) {
-        return new BreadcrumbItemImpl(page, active, linkHandler, level, children);
+
+    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String parentId, boolean isShadowingDisabled) {
+        return new BreadcrumbItemImpl(page, active, linkHandler, level, children, parentId, isShadowingDisabled);
     }
 
     private boolean checkIfNotHidden(Page page) {
