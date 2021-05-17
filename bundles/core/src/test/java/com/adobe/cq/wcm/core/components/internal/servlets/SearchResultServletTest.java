@@ -33,7 +33,6 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +41,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.search.PredicateGroup;
@@ -59,6 +59,7 @@ import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static com.adobe.cq.wcm.core.components.Utils.enableDataLayer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -216,7 +217,7 @@ public class SearchResultServletTest {
     @Test
     public void testTemplateBasedSearch() throws Exception {
         setUpQueryBuilder();
-        com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
+        enableDataLayer(context, true);
         context.currentResource(TEST_TEMPLATE_EN);
         MockSlingHttpServletRequest request = context.request();
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
@@ -238,7 +239,7 @@ public class SearchResultServletTest {
     @Test
     public void testXFSearch() throws Exception {
         setUpQueryBuilder();
-        com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
+        enableDataLayer(context, true);
         context.currentResource(TEST_XF_PAGE_EN);
         MockSlingHttpServletRequest request = context.request();
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=found");
@@ -255,7 +256,7 @@ public class SearchResultServletTest {
     @Test
     public void testXFTemplateSearch() throws Exception {
         setUpQueryBuilder();
-        com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
+        enableDataLayer(context, true);
         context.currentResource(TEST_XF_TEMPLATE_EN);
         MockSlingHttpServletRequest request = context.request();
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=found");
@@ -269,7 +270,6 @@ public class SearchResultServletTest {
         validateResponse(context.response(), expected);
     }
 
-    @SuppressWarnings("deprecation")
     private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> expected) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SimpleAbstractTypeResolver resolver = new SimpleAbstractTypeResolver();
@@ -280,20 +280,16 @@ public class SearchResultServletTest {
         ListItem[] listItems = mapper.readValue(response.getOutputAsString(), ListItem[].class);
         List<Map<String, String>> actual = new LinkedList<>();
         for (ListItem item : listItems) {
-            actual.add(ImmutableMap.of("url", item.getURL(), "title", item.getTitle(), "id", item.getId()));
+            actual.add(ImmutableMap.of("url", item.getLink().getURL(), "title", item.getTitle(), "id", item.getId()));
         }
         assertEquals(expected, actual);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Item implements ListItem {
-        private Link link;
         private String id;
         private String url;
         private String title;
-
-        public Item() {
-        }
 
         @Nullable
         @Override
@@ -312,31 +308,25 @@ public class SearchResultServletTest {
         public String getTitle() {
             return title;
         }
+
+        @Nullable
+        public Link<Object> getLink() {
+            return new MockLink(url);
+        }
     }
 
-    private static class Link implements com.adobe.cq.wcm.core.components.commons.link.Link {
+    private static class MockLink implements Link<Object> {
 
-        private boolean valid;
-        private String url;
-        private Map<String,String> htmlAttributes;
+        private final String url;
 
-        @Override
-        public boolean isValid() {
-            return valid;
+        private MockLink(String url) {
+            this.url = url;
         }
 
         @Override
-        public @Nullable String getURL() {
+        public String getURL() {
             return url;
         }
 
-        @Override
-        public @Nullable String getMappedURL() { return null; }
-
-        @Override
-        public @NotNull Map<String, String> getHtmlAttributes() {
-            return htmlAttributes;
-        }
     }
-
 }
