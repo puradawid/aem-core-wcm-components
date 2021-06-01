@@ -17,14 +17,9 @@
                     "jcr:primaryType": "cq:PageContent",
                     "jcr:title"      : "Page",
                     "jcr:description": "Yoda ist zurück!",
-                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200",
                     "search"         : {
                         "jcr:primaryType"   : "nt:unstructured",
-                        "jcr:createdBy"     : "admin",
                         "placeholder"       : "Suche starten",
-                        "jcr:lastModifiedBy": "admin",
-                        "jcr:created"       : "Thu Aug 03 2017 20:50:40 GMT+0200",
-                        "jcr:lastModified"  : "Thu Aug 03 2017 22:42:00 GMT+0200",
                         "sling:resourceType": "core/wcm/components/search/v1/search"
                     }
                 }
@@ -34,8 +29,7 @@
                 "jcr:content"    : {
                     "jcr:primaryType": "cq:PageContent",
                     "jcr:title"      : "Page2",
-                    "jcr:description": "Yoda ist nicht zurück!",
-                    "cq:lastModified": "Thu Aug 03 2020 22:42:00 GMT+0200"
+                    "jcr:description": "Yoda ist nicht zurück!"
                 }
             }
         }
@@ -58,15 +52,11 @@
                     "jcr:primaryType": "cq:PageContent",
                     "jcr:title"      : "Page",
                     "jcr:description": "Yoda is back!",
-                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200",
                     "search"         : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:createdBy"     : "admin",
                         "placeholder"       : "Start Search",
                         "searchRoot"        : "/content/de/search",
-                        "jcr:lastModifiedBy": "admin",
-                        "jcr:created"       : "Thu Aug 03 2017 20:50:40 GMT+0200",
-                        "jcr:lastModified"  : "Thu Aug 03 2017 22:42:00 GMT+0200",
                         "sling:resourceType": "core/wcm/components/search/v1/search"
                     }
                 }
@@ -76,8 +66,7 @@
                 "jcr:content"    : {
                     "jcr:primaryType": "cq:PageContent",
                     "jcr:title"      : "Page2",
-                    "jcr:description": "Yoda isn't back!",
-                    "cq:lastModified": "Thu Aug 03 2020 22:42:00 GMT+0200"
+                    "jcr:description": "Yoda isn't back!"
                 }
             },
             "page-template"  : {
@@ -86,8 +75,7 @@
                     "jcr:primaryType": "cq:PageContent",
                     "jcr:title"      : "Page3",
                     "cq:template"    : "/conf/test/settings/wcm/templates/search-template",
-                    "jcr:description": "Yoda is back!",
-                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200"
+                    "jcr:description": "Yoda is back!"
                 }
             },
             "xf-page"         : {
