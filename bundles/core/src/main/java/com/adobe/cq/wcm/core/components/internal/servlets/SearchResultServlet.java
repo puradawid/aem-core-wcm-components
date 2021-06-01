@@ -121,7 +121,7 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
             request.setAttribute(SlingBindings.class.getName(), bindings);
 
             Search searchComponent = new SearchComponentProvider(modelFactory, languageManager, relationshipManager)
-                .getSearchComponent(request, currentPage);
+                .getSearchComponent(request.getRequestPathInfo().getSuffix(), request, currentPage);
             try {
                 List<ListItem> results = getResults(request, searchComponent, currentPage.getPageManager());
                 response.setContentType("application/json");

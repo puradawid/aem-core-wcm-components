@@ -38,6 +38,20 @@ import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 
 import static com.adobe.cq.wcm.core.components.models.ExperienceFragment.PN_FRAGMENT_VARIATION_PATH;
 
+/**
+ * Seeks the search component on a current page based on a provided suffix,
+ * which is a hint of internal path within the page. Therefore, if the search
+ * component exists inside of an experience fragment just referenced in the
+ * original page, the suffix represents only local experience fragment path.
+ *
+ * If the suffix path does not point to the search component, this class
+ * iterates through the entire page, and looks for experience fragments, which
+ * are going to be tested against search component existence. It does the same
+ * for page's template if it finds nothing in the original page.
+ *
+ * If it does not find any search component, it returns default search settings
+ * object as a fallback.
+ */
 class SearchComponentProvider {
 
     /**
@@ -63,8 +77,8 @@ class SearchComponentProvider {
      * @return The search component.
      */
     @NotNull
-    Search getSearchComponent(@NotNull final SlingHttpServletRequest request, @NotNull final Page currentPage) {
-        String suffix = request.getRequestPathInfo().getSuffix();
+    Search getSearchComponent(@Nullable final String suffix,
+        @NotNull final SlingHttpServletRequest request, @NotNull final Page currentPage) {
         String relativeContentResourcePath = Optional.ofNullable(suffix)
             .filter(path -> StringUtils.startsWith(path, "/"))
             .map(path -> StringUtils.substring(path, 1))
