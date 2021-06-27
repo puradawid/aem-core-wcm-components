@@ -297,6 +297,11 @@ public class SearchResultServletTest {
             return id;
         }
 
+        @Override
+        public @NotNull Link getLink() {
+            return link;
+        }
+
         @Nullable
         @Override
         public String getURL() {
