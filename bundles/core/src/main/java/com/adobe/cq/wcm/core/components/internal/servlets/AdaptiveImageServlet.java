@@ -53,10 +53,10 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.dam.api.Asset;
@@ -77,6 +77,8 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
 
 /**
  * Servlet for adaptive images, can render images with different widths based on policies and requested width.
@@ -104,7 +106,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
     private int maxInputWidth;
-    
+
     private AdaptiveImageServletMetrics metrics;
 
     @SuppressFBWarnings(justification = "This field needs to be transient")
@@ -113,7 +115,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
-    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics, 
+    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics,
             int defaultResizeWidth, int maxInputWidth) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
@@ -183,23 +185,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 component = componentCandidate;
             }
 
-            ImageComponent imageComponent = new ImageComponent(component);
-            // If the image has no content, use the featured image of the page if it exists
-            if (imageComponent.source == Source.NOCONTENT) {
-                PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-                if (pageManager != null) {
-                    Page page = pageManager.getContainingPage(component);
-                    if (page != null) {
-                        Resource featuredImage = ComponentUtils.getFeaturedImage(page);
-                        if (featuredImage != null) {
-                            imageComponent = new ImageComponent(featuredImage);
-                        }
-                    }
-                }
-            }
+            LinkHandler linkHandler = request.adaptTo(LinkHandler.class);
+            Resource wrappedImageResourceWithInheritance = getWrappedImageResourceWithInheritance(component, linkHandler);
+            ImageComponent imageComponent = new ImageComponent(wrappedImageResourceWithInheritance);
+
             if (imageComponent.source == Source.NOCONTENT || imageComponent.source == Source.NONEXISTING) {
                 LOGGER.error("Either the image from {} does not have a valid file reference" +
-                        "or the containing page does not have a valid featured image", component.getPath());
+                        " or the containing page does not have a valid featured image", component.getPath());
                 metrics.markImageErrors();
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
@@ -497,7 +489,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @NotNull
     private Layer getLayer(@NotNull EnhancedRendition rendition) throws IOException {
         AssetHandler assetHandler = assetStore.getAssetHandler(rendition.getMimeType());
-        return new Layer(assetHandler.getImage(rendition));
+        return new Layer(assetHandler.getImage(rendition.getRendition()));
     }
 
     /**
@@ -775,7 +767,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      */
     private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component) throws IllegalArgumentException {
         Map<String, Integer> selectorParameterMap = new HashMap<>();
-        int width = this.defaultResizeWidth;
+        int width = this.getResizeWidth(component) > 0 ? this.getResizeWidth(component) : this.defaultResizeWidth;
         if (selectorList.size() > 1) {
             String widthString = (selectorList.size() > 2 ? selectorList.get(2) : selectorList.get(1));
             try {
@@ -840,7 +832,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         }
         if (list.isEmpty()) {
-            list.add(this.defaultResizeWidth);
+            int width = this.getResizeWidth(imageResource) > 0 ? this.getResizeWidth(imageResource) : this.defaultResizeWidth;
+            list.add(width);
         }
         return list;
     }
@@ -859,6 +852,22 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_JPEG_QUALITY, DEFAULT_JPEG_QUALITY);
         }
         return allowedJpegQuality;
+    }
+
+    /**
+     * Returns the allowed resize width from this component's content policy.
+     *
+     * @param imageResource the resource identifying the accessed image component
+     * @return the resize width or 0 if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
+     */
+    private int getResizeWidth(@NotNull Resource imageResource){
+        int allowedResizeWidth = 0;
+        ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        if (contentPolicy != null) {
+            allowedResizeWidth = contentPolicy.getProperties()
+                .get(Image.PN_DESIGN_RESIZE_WIDTH, 0);
+        }
+        return  allowedResizeWidth;
     }
 
     private long getRequestLastModifiedSuffix(@Nullable String suffix) {

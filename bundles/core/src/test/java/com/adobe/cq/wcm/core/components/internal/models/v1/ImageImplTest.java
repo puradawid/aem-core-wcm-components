@@ -37,10 +37,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(AemContextExtension.class)
 public class ImageImplTest extends AbstractImageTest {
 
-    private static final String TEST_ROOT = "/content";
+    protected static final String TEST_ROOT = "/content";
     protected static String PAGE = TEST_ROOT + "/test";
     private static final String IMAGE_TITLE_ALT = "Adobe Logo";
     protected static String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png";
+    protected static String IMAGE_FILE_REFERENCE_NO_DATE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_no_date.png";
     private static final String IMAGE_LINK = "https://www.adobe.com";
     protected static String ASSET_NAME = "adobe-systems-logo-and-wordmark";
 
@@ -181,6 +182,34 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     @SuppressWarnings("deprecation")
+    protected void testImageFromTemplateStructureNoDate() {
+        context.contentPolicyMapping("core/wcm/components/image",
+                "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
+        Image image = getImageUnderTest(TEMPLATE_IMAGE_NO_DATE_PATH);
+        assertEquals(CONTEXT_PATH + "/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + ".png/structure/jcr" +
+                "%3acontent/root/image_template_no_date.png", image.getSrc());
+        assertEquals(IMAGE_TITLE_ALT, image.getAlt());
+        assertEquals(IMAGE_TITLE_ALT, image.getTitle());
+        assertEquals(IMAGE_FILE_REFERENCE_NO_DATE, image.getFileReference());
+        String expectedJson = "{" +
+                "\"smartImages\":[\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  "." + jpegQuality +
+                ".600.png/structure/jcr%3acontent/root/image_template_no_date.png\",\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + "." +
+                jpegQuality + ".700.png/structure/jcr%3acontent/root/image_template_no_date.png\", \"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." +
+                selector + "." + jpegQuality + ".800.png/structure/jcr%3acontent/root/image_template_no_date.png\"," +
+                "\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  "." + jpegQuality +
+                ".2000.png/structure/jcr%3acontent/root/image_template_no_date.png\",\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  "." +
+                jpegQuality + ".2500.png/structure/jcr%3acontent/root/image_template_no_date.png\"]," +
+                "\"smartSizes\":[600,700,800,2000,2500]," +
+                "\"lazyEnabled\":true" +
+                "}";
+        compareJSON(expectedJson, image.getJson());
+        assertFalse(image.displayPopupTitle());
+        assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_NO_DATE_PATH));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
     protected void testLocalFileWithoutFileNameParameter() {
         context.contentPolicyMapping(resourceType,
                 "allowedRenditionWidths", new int[]{600}, "disableLazyLoading", true);
@@ -199,7 +228,7 @@ public class ImageImplTest extends AbstractImageTest {
         Image image = getImageUnderTest(IMAGE6_PATH);
         assertNotNull(image.getData());
 
-        String expected = "{\"image-db7ae5b54e\":{\"image\":{\"repo:id\":\"60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5\",\"xdm:tags\":[],\"@type\":\"image/gif\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\",\"repo:path\":\"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif\",\"xdm:smartTags\":{\"nature\":0.74,\"lake\":0.79,\"water\":0.78,\"landscape\":0.75}},\"dc:title\":\"Adobe Logo\",\"@type\":\"core/wcm/components/image/v1/image\",\"xdm:linkURL\":\"/core/content/test-image.html\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\"}}";
+        String expected = "{\"image-db7ae5b54e\":{\"image\":{\"repo:id\":\"60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5\",\"@type\":\"image/gif\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\",\"repo:path\":\"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif\",\"xdm:smartTags\":{\"nature\":0.74,\"lake\":0.79,\"water\":0.78,\"landscape\":0.75}},\"dc:title\":\"Adobe Logo\",\"@type\":\"core/wcm/components/image/v1/image\",\"xdm:linkURL\":\"/core/content/test-image.html\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\"}}";
         assertEquals(Json.createReader(new StringReader(expected)).read(),
             Json.createReader(new StringReader(image.getData().getJson())).read());
     }
